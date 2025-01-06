@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 from pydantic import BaseModel, Extra
 
@@ -20,9 +20,13 @@ class HistoryCreateDB(HistoryCreate):
     answer: str
 
 
-class HistoryResponse(HistoryCreateDB):
+class HistoryResponse(HistoryBase):
     id: int
     datetime: datetime
+    answer: str
+
+    class Config:
+        orm_mode = True
 
 
 class DefaultPagination(BaseModel):
@@ -31,9 +35,8 @@ class DefaultPagination(BaseModel):
 
 
 class BasePaginatedResponse(BaseModel):
-    limit: Optional[int]
-    offset: Optional[int]
-    total: Optional[int]
+    limit: int
+    offset: int
     objects: List[HistoryResponse]
 
     class Config:
